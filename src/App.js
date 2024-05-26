@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from 'react';
+import { HashRouter as Router, Route, Routes, Navigate, useLocation } from 'react-router-dom';
+import Sidebar from './components/Sidebar';
+import Home from './components/Home';
+import About from './components/About';
+import Support from './components/Support';
+import Chatbot from './components/Chatbot';
+import './App.css'; // Ensure to import your CSS file for styling
 
-function App() {
+const App = () => {
+  useEffect(() => {
+    document.title = 'Routing';
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div style={{ display: 'flex' }}>
+        <Sidebar />
+        <div style={{ marginLeft: '200px', padding: '20px', width: '100%' }}>
+          <Routes>
+            <Route path="/home" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/support" element={<Support />} />
+            <Route path="*" element={<Navigate to="/home" />} />
+          </Routes>
+        </div>
+      </div>
+      <ConditionalChatbot />
+    </Router>
   );
-}
+};
+
+const ConditionalChatbot = () => {
+  const location = useLocation();
+
+  return location.pathname === '/support' ? <Chatbot /> : null;
+};
 
 export default App;
